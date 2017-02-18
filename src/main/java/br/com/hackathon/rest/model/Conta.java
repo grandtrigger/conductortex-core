@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -33,32 +32,31 @@ public class Conta implements Serializable, Comparable<Conta>{
     @GeneratedValue(generator = "conta_seq", strategy = GenerationType.TABLE)
     private Long id;
     
-    @NotNull(message = "Nome completo não pode ser nulo.")
-    @NotEmpty(message = "Nome completo não pode ser vazio.")
+    @NotNull(message = "O campo nomeCompleto não pode ser nulo")
+    @NotEmpty(message = "O campo nomeCompleto não pode ser vazio")
     @Column(nullable = false, length = 200, unique = false)
     private String nomeCompleto;
     
-    @NotNull(message = "Apelido não pode ser nulo.")
-    @NotEmpty(message = "Apelido não pode ser vazio.")
+    @NotNull(message = "O campo apelido não pode ser nulo")
+    @NotEmpty(message = "O campo apelido não pode ser vazio")
     @Column(nullable = false, length = 20, unique = false)
     private String apelido;
     
-    @NotNull(message = "Email não pode ser nulo.")
-    @NotEmpty(message = "Email não pode ser vazio.")
-    @Email(message = "Email fora do padrão. ex: exemplo@exemplo.com")
+    @NotNull(message = "O campo email não pode ser nulo")
+    @NotEmpty(message = "O campo email não pode ser vazio")
+    @Email(message = "Email não é válido")
     @Column(nullable = false, length = 250, unique = true)
     private String email;
     
-    @NotNull(message = "Senha não pode ser nula.")
-    @NotEmpty(message = "Senha não pode ser vazio.")
-    @Column(nullable = false, length = 15, unique = false)
-    private String senha;
-    
-    @NotNull(message = "Cpf não pode ser nulo.")
-    @NotEmpty(message = "Cpf não pode ser vazio.")
-    @Pattern(regexp = "[0-9]{11}")
+    @NotNull(message = "O campo cpf não pode ser nulo")
+    @NotEmpty(message = "O campo cpf não pode ser vazio")
     @Column(nullable = false, length = 11, unique = true)
     private String cpf;
+    
+    @NotNull(message = "O campo senha não pode ser nula.")
+    @NotEmpty(message = "O campo senha não pode ser vazio.")
+    @Column(nullable = false, length = 15, unique = false)
+    private String senha;
     
     @Column(nullable = false, unique = false)
     private BigDecimal saldo;

@@ -8,6 +8,7 @@ package br.com.hackathon.rest.model;
 
 import java.io.Serializable;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,6 +32,8 @@ public class Participante implements Serializable{
     
     @ManyToOne(cascade = {CascadeType.MERGE})
     private Conta conta;
+    
+    @Column(length = 1, nullable = false)
     private Boolean confirmacao;
 
     public Participante() {

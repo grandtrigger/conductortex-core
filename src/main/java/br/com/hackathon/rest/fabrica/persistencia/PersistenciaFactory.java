@@ -18,7 +18,7 @@ import javax.persistence.PersistenceContext;
  */
 public class PersistenciaFactory<T, K> {
 
-    @PersistenceContext(unitName = "persistencia")
+    @PersistenceContext(unitName = "hackathon")
     private EntityManager entityManager;
 
     /**

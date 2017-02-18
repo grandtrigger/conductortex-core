@@ -5,8 +5,8 @@
  */
 package br.com.hackathon.rest.services;
 
-import br.com.hackathon.rest.dao.ContaDAO;
 import br.com.hackathon.rest.model.Conta;
+import br.com.hackathon.rest.model.Evento;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,13 +17,13 @@ import javax.ws.rs.core.Response;
  *
  * @author Alexandre Feitosa Faustino <afeitosa29@gmail.com>
  */
-@Path("/rest/conta")
-public class ContaRest {
+@Path("/rest/evento")
+public class EventoRest {
     
     @POST
-    @Path("/cadastraConta")
+    @Path("/cadastraEvento")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cadastraConta(Conta conta){
+    public Response cadastraConta(Evento evento){
         
         return Response.ok().entity("Servidor disponivel").build();
     }

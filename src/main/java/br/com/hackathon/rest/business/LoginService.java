@@ -6,10 +6,15 @@
 
 package br.com.hackathon.rest.business;
 
+import br.com.hackathon.rest.dao.LoginDAO;
+import br.com.hackathon.rest.exception.DAOException;
+import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Login;
+import br.com.hackathon.rest.validador.Validador;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 
 /**
  *
@@ -21,8 +26,18 @@ import javax.ejb.TransactionAttributeType;
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public class LoginService {
 
-    public void logar(Login login){
-        
+    @Inject
+    private LoginDAO loginDAO;
+    
+    @Inject
+    private Validador validador;
+    
+    public Boolean logar(Login login) throws NegocioException{
+        try {
+            return loginDAO.consultarContaPorTelefoneSenha(login.getTelefone(), login.getSenha()) != null;
+        } catch (DAOException e) {
+            throw new NegocioException(e);
+        }
     }
     
 }

@@ -1,5 +1,6 @@
 package br.com.hackathon.rest.persistencia;
 
+import br.com.hackathon.rest.exception.PersistenciaException;
 import br.com.hackathon.rest.interfaces.Persistencia;
 import java.util.Date;
 import java.util.List;
@@ -21,16 +22,16 @@ import javax.persistence.TransactionRequiredException;
  *
  */
 @Dependent
-public class PersistenciaImplementacao <T, K> implements Persistencia<T, K> {
+public class PersistenciaImplementacao<T, K> implements Persistencia<T, K> {
 
     private final EntityManager entityManager;
     private final Class<T> klass;
-    
+
     public PersistenciaImplementacao(Class<T> klass, EntityManager entityManager) {
         this.klass = klass;
         this.entityManager = entityManager;
     }
-    
+
     @Override
     public T gravar(T t) throws PersistenceException, IllegalArgumentException {
         try {
@@ -39,9 +40,9 @@ public class PersistenciaImplementacao <T, K> implements Persistencia<T, K> {
             return entity;
         } catch (IllegalArgumentException iae) {
             throw new IllegalArgumentException(iae);
-        } catch (TransactionRequiredException tre){
+        } catch (TransactionRequiredException tre) {
             throw new PersistenceException(tre);
-        } catch(PersistenceException pe){
+        } catch (PersistenceException pe) {
             throw new PersistenceException(pe);
         }
     }
@@ -54,9 +55,9 @@ public class PersistenciaImplementacao <T, K> implements Persistencia<T, K> {
             return entity;
         } catch (IllegalArgumentException iae) {
             throw new IllegalArgumentException(iae);
-        } catch (TransactionRequiredException tre){
+        } catch (TransactionRequiredException tre) {
             throw new PersistenceException(tre);
-        } catch(PersistenceException pe){
+        } catch (PersistenceException pe) {
             throw new PersistenceException(pe);
         }
     }
@@ -74,11 +75,11 @@ public class PersistenciaImplementacao <T, K> implements Persistencia<T, K> {
     public void remover(T t) throws IllegalArgumentException {
         try {
             entityManager.remove(t);
-        }  catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             throw new IllegalArgumentException(iae);
-        } catch (TransactionRequiredException tre){
+        } catch (TransactionRequiredException tre) {
             throw new PersistenceException(tre);
-        } 
+        }
     }
 
     @Override
@@ -87,20 +88,24 @@ public class PersistenciaImplementacao <T, K> implements Persistencia<T, K> {
     }
 
     @Override
-    public List<T> consultar(String namedQuery, Map<?, ?> parametros) {
-        Query query = this.entityManager.createNamedQuery(namedQuery);
-        setParametros(query, parametros);
-        return query.getResultList();
-    }
-
-    private void setParametros(Query query, Map<?, ?> parametros){
-        for( String key : (Set<String>)parametros.keySet()){
-            if( parametros.get(key) instanceof Date){
-                query.setParameter( key, (Date)parametros.get(key), TemporalType.DATE );
-            }else{
-                query.setParameter( key, parametros.get(key) );
-            }
+    public List<T> consultar(String namedQuery, Map<?, ?> parametros) throws PersistenciaException {
+        try {
+            Query query = this.entityManager.createNamedQuery(namedQuery);
+            setParametros(query, parametros);
+            return query.getResultList();
+        } catch (Exception e) {
+            throw new PersistenciaException(e);
         }
     }
     
+    private void setParametros(Query query, Map<?, ?> parametros) {
+        for (String key : (Set<String>) parametros.keySet()) {
+            if (parametros.get(key) instanceof Date) {
+                query.setParameter(key, (Date) parametros.get(key), TemporalType.DATE);
+            } else {
+                query.setParameter(key, parametros.get(key));
+            }
+        }
+    }
+
 }

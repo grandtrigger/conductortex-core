@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -32,8 +35,17 @@ public class Evento implements Serializable{
     @Id
     @GeneratedValue(generator = "evento_seq", strategy = GenerationType.TABLE)
     private Long id;
+    
+    @NotNull(message = "Campo descricao não pode ser nulo")
+    @NotEmpty(message = "Campo descricao não pode ser vazio")
+    @Column(nullable = false, length = 200, unique = false)
     private String descricao;
+    
+    @NotNull(message = "Campo valor não pode ser nulo")
+    @NotEmpty(message = "Campo valor não pode ser vazio")
+    @Column(nullable = false, unique = false, precision = 2)
     private BigDecimal valor;
+    
     @OneToOne(cascade = {CascadeType.MERGE})
     private Participante criador;
     @OneToMany(cascade = {CascadeType.MERGE})

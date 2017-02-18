@@ -32,24 +32,24 @@ public class Conta implements Serializable, Comparable<Conta>{
     @GeneratedValue(generator = "conta_seq", strategy = GenerationType.TABLE)
     private Long id;
     
-    @NotNull(message = "")
-    @NotEmpty(message = "")
+    @NotNull(message = "O campo nomeCompleto não pode ser nulo")
+    @NotEmpty(message = "O campo nomeCompleto não pode ser vazio")
     @Column(nullable = false, length = 200, unique = false)
     private String nomeCompleto;
     
-    @NotNull(message = "")
-    @NotEmpty(message = "")
+    @NotNull(message = "O campo apelido não pode ser nulo")
+    @NotEmpty(message = "O campo apelido não pode ser vazio")
     @Column(nullable = false, length = 20, unique = false)
     private String apelido;
     
-    @NotNull(message = "")
-    @NotEmpty(message = "")
-    @Email(message = "")
+    @NotNull(message = "O campo email não pode ser nulo")
+    @NotEmpty(message = "O campo email não pode ser vazio")
+    @Email(message = "Email não é válido")
     @Column(nullable = false, length = 250, unique = true)
     private String email;
     
-    @NotNull(message = "")
-    @NotEmpty(message = "")
+    @NotNull(message = "O campo cpf não pode ser nulo")
+    @NotEmpty(message = "O campo cpf não pode ser vazio")
     @Column(nullable = false, length = 11, unique = true)
     private String cpf;
     

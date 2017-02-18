@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package br.com.hackathon.rest.filtro;
 
 import java.io.IOException;
@@ -14,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -22,23 +22,26 @@ import javax.servlet.annotation.WebFilter;
  *
  */
 @WebFilter(urlPatterns = "/api/login", filterName = "login")
-public class FiltroLogin implements Filter{
+public class FiltroLogin implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        //
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        //FILTRO DE LOGIN
-        System.out.println("Filtro addp");
-        chain.doFilter(request, response);
+        
+        HttpServletResponse res = (HttpServletResponse) response;
+        res.setHeader("Access-Control-Allow-Origin", res.getHeader("Origin"));
+        res.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Max-Age", "3600");
+        res.setHeader("Access-Control-Allow-Headers", "x-requested-with, X-Auth-Token, Content-Type");
+        chain.doFilter(request, res);
+        
     }
 
     @Override
     public void destroy() {
-        //
     }
 
 }

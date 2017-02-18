@@ -1,9 +1,15 @@
 package br.com.hackathon.rest.persistencia;
 
 import br.com.hackathon.rest.interfaces.Persistencia;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.enterprise.context.Dependent;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import javax.persistence.TransactionRequiredException;
 
 /**
@@ -80,4 +86,21 @@ public class PersistenciaImplementacao <T, K> implements Persistencia<T, K> {
         return entityManager;
     }
 
+    @Override
+    public List<T> consultar(String namedQuery, Map<?, ?> parametros) {
+        Query query = this.entityManager.createNamedQuery(namedQuery);
+        setParametros(query, parametros);
+        return query.getResultList();
+    }
+
+    private void setParametros(Query query, Map<?, ?> parametros){
+        for( String key : (Set<String>)parametros.keySet()){
+            if( parametros.get(key) instanceof Date){
+                query.setParameter( key, (Date)parametros.get(key), TemporalType.DATE );
+            }else{
+                query.setParameter( key, parametros.get(key) );
+            }
+        }
+    }
+    
 }

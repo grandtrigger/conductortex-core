@@ -1,10 +1,12 @@
 package br.com.hackathon.rest.config;
 
+import br.com.hackathon.rest.services.LoginRest;
 import br.com.hackathon.rest.services.VerificacaoDB;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import org.eclipse.persistence.internal.oxm.mappings.Login;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -30,6 +32,7 @@ public class ApplicationConfig extends Application{
 
     private void addClass(Set<Class<?>> resources){
         resources.add(VerificacaoDB.class);
+        resources.add(LoginRest.class);
     }
     
 }

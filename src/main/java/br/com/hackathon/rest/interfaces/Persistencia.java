@@ -1,5 +1,7 @@
 package br.com.hackathon.rest.interfaces;
 
+import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.TransactionRequiredException;
@@ -55,5 +57,14 @@ public interface Persistencia <T, K>{
      * @return EntityManager
      */
     public EntityManager getEntityManager();
+    
+    /**
+     * Recupera uma lista de elemento. Recebe um Map<?, ?> de parametros e uma String representando um Named Query
+     * 
+     * @param namedQuery
+     * @param parametros
+     * @return List
+     */
+    public List<T> consultar(String namedQuery, Map<?, ?> parametros);
     
 }

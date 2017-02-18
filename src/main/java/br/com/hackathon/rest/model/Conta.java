@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -32,24 +33,30 @@ public class Conta implements Serializable, Comparable<Conta>{
     @GeneratedValue(generator = "conta_seq", strategy = GenerationType.TABLE)
     private Long id;
     
-    @NotNull(message = "")
-    @NotEmpty(message = "")
+    @NotNull(message = "Nome completo não pode ser nulo.")
+    @NotEmpty(message = "Nome completo não pode ser vazio.")
     @Column(nullable = false, length = 200, unique = false)
     private String nomeCompleto;
     
-    @NotNull(message = "")
-    @NotEmpty(message = "")
+    @NotNull(message = "Apelido não pode ser nulo.")
+    @NotEmpty(message = "Apelido não pode ser vazio.")
     @Column(nullable = false, length = 20, unique = false)
     private String apelido;
     
-    @NotNull(message = "")
-    @NotEmpty(message = "")
-    @Email(message = "")
+    @NotNull(message = "Email não pode ser nulo.")
+    @NotEmpty(message = "Email não pode ser vazio.")
+    @Email(message = "Email fora do padrão. ex: exemplo@exemplo.com")
     @Column(nullable = false, length = 250, unique = true)
     private String email;
     
-    @NotNull(message = "")
-    @NotEmpty(message = "")
+    @NotNull(message = "Senha não pode ser nula.")
+    @NotEmpty(message = "Senha não pode ser vazio.")
+    @Column(nullable = false, length = 15, unique = false)
+    private String senha;
+    
+    @NotNull(message = "Cpf não pode ser nulo.")
+    @NotEmpty(message = "Cpf não pode ser vazio.")
+    @Pattern(regexp = "[0-9]{11}")
     @Column(nullable = false, length = 11, unique = true)
     private String cpf;
     
@@ -62,10 +69,11 @@ public class Conta implements Serializable, Comparable<Conta>{
     public Conta() {
     }
 
-    public Conta(String nomeCompleto, String apelido, String email, String cpf) {
+    public Conta(String nomeCompleto, String apelido, String email, String cpf, String senha) {
         this.nomeCompleto = nomeCompleto;
         this.apelido = apelido;
         this.email = email;
+        this.senha = senha;
         this.cpf = cpf;
     }
 
@@ -123,6 +131,14 @@ public class Conta implements Serializable, Comparable<Conta>{
 
     public void setLimiteEspecial(BigDecimal limiteEspecial) {
         this.limiteEspecial = limiteEspecial;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
     
     @Override

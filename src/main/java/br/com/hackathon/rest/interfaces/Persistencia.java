@@ -1,6 +1,7 @@
 package br.com.hackathon.rest.interfaces;
 
 import br.com.hackathon.rest.exception.PersistenciaException;
+import br.com.hackathon.rest.model.Participante;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -67,5 +68,5 @@ public interface Persistencia <T, K>{
      * @return List
      */
     public List<T> consultar(String namedQuery, Map<?, ?> parametros)throws PersistenciaException;
-    
+
 }

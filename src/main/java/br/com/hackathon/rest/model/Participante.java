@@ -14,8 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.TableGenerator;
 
 /**
@@ -26,9 +24,6 @@ import javax.persistence.TableGenerator;
  */
 @Entity
 @TableGenerator(initialValue = 1, allocationSize = 1, name = "participante_seq")
-@NamedQueries(value = {
-    @NamedQuery(name = "participante.consultar.participante.por.telefone", query = "SELECT p FROM Participante p WHERE p.telefone = :telefone AND c.senha = :senha")
-})
 public class Participante implements Serializable{
 
     @Id

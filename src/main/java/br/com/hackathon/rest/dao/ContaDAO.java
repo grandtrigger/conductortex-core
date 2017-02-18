@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+import javax.persistence.PersistenceException;
 
 
 /**
@@ -36,75 +37,73 @@ public class ContaDAO {
     @Inject
     private MensagensBase mensagensBase;
     
+    /**
+     * Método que cadastra uma nova conta
+     * 
+     * @param conta
+     * @return Conta
+     * @throws DAOException 
+     */
     public Conta cadastraConta(Conta conta) throws DAOException{
-        
         try {
-            
             return dao.gravar(conta);
-            
-        } catch (Exception ex) {
-            
-            throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
-            
-        }//catch
-
-    }//cadastraConta
+        } catch (PersistenceException | IllegalArgumentException ex) {
+            throw new DAOException(mensagensBase.get(MensagensCodigo.MS003), ex);
+        }
+    }
     
+    /**
+     * Métoda que consulta uma conta por telefone
+     * 
+     * @param telefone
+     * @return Conta
+     * @throws DAOException 
+     */
     public Conta consultaContaPorTelefone(String telefone) throws DAOException{
-        
         try {
-            
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("telefone", telefone);
-            
             List<Conta> contas = dao.consultar("conta.consultar.conta.por.telefone", parametros);
-            
             return listaValidador.isValid(contas) ? contas.get(0) : null;
-            
         } catch (PersistenciaException ex) {
-            
             throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
-            
         }//catch
-
     }//consultaContaPorTelefone
     
+    /**
+     * Método que consulta um conta por cpf
+     * 
+     * @param cpf
+     * @return Conta
+     * @throws DAOException 
+     */
     public Conta consultaContaPorCpf(String cpf) throws DAOException{
-        
         try {
-            
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("cpf", cpf);
-            
             List<Conta> contas = dao.consultar("conta.consultar.conta.por.cpf", parametros);
-            
             return listaValidador.isValid(contas) ? contas.get(0) : null;
-            
         } catch (PersistenciaException ex) {
-            
             throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
-            
         }//catch
-
     }//consultaContaPorCpf
     
+    /**
+     * Método que consulta uma conta por email
+     * 
+     * @param email
+     * @return Conta
+     * @throws DAOException 
+     */
     public Conta consultaContaPorEmail(String email) throws DAOException{
-        
         try {
-            
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("email", email);
-            
             List<Conta> contas = dao.consultar("conta.consultar.conta.por.email", parametros);
-            
             return listaValidador.isValid(contas) ? contas.get(0) : null;
-            
         } catch (PersistenciaException ex) {
-            
             throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
-            
         }//catch
-
     }//consultaContaPorEmail
-    
+
 }//ContaDAO

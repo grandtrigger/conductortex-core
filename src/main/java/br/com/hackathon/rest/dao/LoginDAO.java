@@ -5,6 +5,7 @@
  */
 package br.com.hackathon.rest.dao;
 
+import br.com.hackathon.rest.criptografia.Encriptor;
 import br.com.hackathon.rest.enumeracoes.MensagensCodigo;
 import br.com.hackathon.rest.exception.DAOException;
 import br.com.hackathon.rest.exception.PersistenciaException;
@@ -12,10 +13,11 @@ import br.com.hackathon.rest.interfaces.Persistencia;
 import br.com.hackathon.rest.model.Conta;
 import br.com.hackathon.rest.util.MensagensBase;
 import br.com.hackathon.rest.validador.ListaValidador;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.enterprise.context.Dependent;
+import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
 
 /**
@@ -24,7 +26,6 @@ import javax.inject.Inject;
  * @date 18/02/2017
  *
  */
-@Dependent
 public class LoginDAO {
 
     @Inject
@@ -36,26 +37,18 @@ public class LoginDAO {
     @Inject
     private MensagensBase mensagensBase;
     
+    @Inject
+    private Encriptor encriptor;
+    
     public Conta consultarContaPorTelefoneSenha(String telefone, String senha) throws DAOException {
-
         try {
-            
-            listaValidador = new ListaValidador();
-            
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("telefone", telefone);
-            parametros.put("senha", senha);
-            
+            parametros.put("senha", encriptor.encrypt(senha) );
             List<Conta> contas = dao.consultar("conta.consultar.conta.por.login.senha", parametros);
-            
             return listaValidador.isValid(contas) ? contas.get(0) : null;
-            
-        } catch (PersistenciaException ex) {
-            
+        } catch (PersistenciaException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
             throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
-            
-        }//catch
-        
-    }//consultarContaPorTelefoneSenha
-
-}//LoginDAOS
+        }
+    }
+}

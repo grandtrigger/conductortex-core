@@ -5,11 +5,17 @@
  */
 package br.com.hackathon.rest.services;
 
-import br.com.hackathon.rest.dao.ContaDAO;
+import br.com.hackathon.rest.business.ContaService;
+import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Conta;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -17,15 +23,54 @@ import javax.ws.rs.core.Response;
  *
  * @author Alexandre Feitosa Faustino <afeitosa29@gmail.com>
  */
-@Path("/rest/conta")
+@Path("/rest/contas")
 public class ContaRest {
-    
+
+    @Inject
+    private ContaService contaService;
+
     @POST
-    @Path("/cadastraConta")
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response cadastraConta(Conta conta){
-        
-        return Response.ok().entity("Servidor disponivel").build();
+        try {
+            return Response.ok().entity( contaService.cadastrar(conta)).build();
+        } catch (NegocioException ex) {
+            throw new WebApplicationException(ex);
+        }
+    }
+    
+    @GET
+    @Path("telefone/{telefone}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response consultarContaPorTelefone(@PathParam("telefone")String telefone){
+        try {
+            return Response.ok().entity( contaService.consultarContaPorTelefone(telefone)).build();
+        } catch (NegocioException ex) {
+            throw new WebApplicationException(ex);
+        }
+    }
+    
+    @GET
+    @Path("cpf/{cpf}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response consultarContaPorCpf(@PathParam("cpf")String cpf){
+        try {
+            return Response.ok().entity( contaService.consultarContaPorCpf(cpf)).build();
+        } catch (NegocioException ex) {
+            throw new WebApplicationException(ex);
+        }
+    }
+    
+    @GET
+    @Path("email/{email}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response consultarContaPorEmail(@PathParam("email")String email){
+        try {
+            return Response.ok().entity( contaService.consultarContaPorEmail(email)).build();
+        } catch (NegocioException ex) {
+            throw new WebApplicationException(ex);
+        }
     }
     
 }

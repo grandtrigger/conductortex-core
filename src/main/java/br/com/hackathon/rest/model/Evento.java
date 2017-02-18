@@ -6,6 +6,7 @@
 
 package br.com.hackathon.rest.model;
 
+import br.com.hackathon.rest.enumeracoes.TipoEvento;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,9 +14,13 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
@@ -30,6 +35,9 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @TableGenerator(allocationSize = 1, initialValue = 1, name = "evento_seq")
+@NamedQueries(value = {
+    @NamedQuery(name = "evento.consultar.eventos.por.participante", query = "SELECT DISTINCT(e) FROM Evento e JOIN e.participantes p  WHERE e.criador.conta.telefone = :telefone OR p.conta.telefone = :telefone AND e.tipoEvento = :evento ")
+})
 public class Evento implements Serializable{
 
     @Id
@@ -51,15 +59,19 @@ public class Evento implements Serializable{
     @OneToMany(cascade = {CascadeType.MERGE})
     private List<Participante> participantes;
 
+    @Enumerated(EnumType.STRING)
+    private TipoEvento tipoEvento;
+    
     public Evento() {
         this.participantes = new ArrayList<>();
     }
 
-    public Evento(String descricao, BigDecimal valor, Participante criador, List<Participante> participantes) {
+    public Evento(String descricao, BigDecimal valor, Participante criador, List<Participante> participantes, TipoEvento evento) {
         this.descricao = descricao;
         this.valor = valor;
         this.criador = criador;
         this.participantes = participantes;
+        this.tipoEvento = evento;
     }
 
     public Long getId() {
@@ -100,6 +112,14 @@ public class Evento implements Serializable{
 
     public void setParticipantes(List<Participante> participantes) {
         this.participantes = participantes;
+    }
+
+    public TipoEvento getTipoEvento() {
+        return tipoEvento;
+    }
+
+    public void setTipoEvento(TipoEvento tipoEvento) {
+        this.tipoEvento = tipoEvento;
     }
     
 }

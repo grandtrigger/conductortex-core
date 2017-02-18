@@ -6,62 +6,29 @@
 
 package br.com.hackathon.rest.token;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 /**
- * 
+ *
  * @author Felipe de Brito Lira <felipedebritolira@gmail.com>
+ * @date 18/02/2017
+ *
  */
-public class Token implements Serializable{
+public class Token {
 
-    private String email;
-    private LocalDateTime geracao;
-    private Long duracaoMinutos;
+    private String token;
 
     public Token() {
     }
 
-    public Token(String token, Long duracao) {
-        this.email = token;
-        this.geracao = LocalDateTime.now();
-        this.duracaoMinutos = duracao;
-    }
-    
-    public String getEmail() {
-        return email;
+    public Token(String token) {
+        this.token = token;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getToken() {
+        return token;
     }
 
-    public LocalDateTime getGeracao() {
-        return geracao;
-    }
-
-    public Long getDuracaoMinutos() {
-        return duracaoMinutos;
-    }
-
-    private void setGeracao(LocalDateTime geracao) {
-        this.geracao = geracao;
+    public void setToken(String token) {
+        this.token = token;
     }
     
-    public void setDuracaoMinutos(Long duracaoMinutos) {
-        this.duracaoMinutos = duracaoMinutos;
-    }
-    
-    private LocalDateTime validade(){
-        return getGeracao().plusMinutes( getDuracaoMinutos() );
-    }
-    
-    public Boolean isExpirado() {
-        LocalDateTime localDate = LocalDateTime.now();
-        return localDate.isAfter( validade() );
-    }
-    
-    public void atualizar(){
-        setGeracao( LocalDateTime.now() );
-    }
 }

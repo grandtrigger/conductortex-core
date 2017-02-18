@@ -31,7 +31,7 @@ public class GerenciadorToken {
     private StringValidador stringValidador;
     
     @Inject
-    private ConversorJSON<Token> conversorJSON;
+    private ConversorJSON<TokenEstrutura> conversorJSON;
     
     @Inject
     private MensagensBase mensagensBase;
@@ -57,7 +57,7 @@ public class GerenciadorToken {
      */
     public String gerador(String email, Long duracao) throws NoSuchAlgorithmException, NoSuchPaddingException {
         email = stringValidador.isValid(email) ? email : GerenciadorToken.class.toString();
-        Token token = new Token(email, (duracao <= 0 ? DURACAO : duracao) );
+        TokenEstrutura token = new TokenEstrutura(email, (duracao <= 0 ? DURACAO : duracao) );
         return this.encriptor.encrypt( conversorJSON.converteJSON(token) );
     }
     
@@ -74,7 +74,7 @@ public class GerenciadorToken {
             throw new TokenException( mensagensBase.get(MensagensCodigo.MS001) );
         }
         try {
-            Token token = (Token)this.conversorJSON.converteObject(  new String( this.encriptor.decrypt(str) ) );
+            TokenEstrutura token = (TokenEstrutura)this.conversorJSON.converteObject(  new String( this.encriptor.decrypt(str) ) );
             return token.isExpirado();
         } catch (JsonSyntaxException e) {
             throw new TokenException( e );
@@ -95,7 +95,7 @@ public class GerenciadorToken {
             throw new TokenException( mensagensBase.get(MensagensCodigo.MS001) );
         }
         try {
-            Token token = (Token)this.conversorJSON.converteObject( new String( this.encriptor.decrypt(str) ) );
+            TokenEstrutura token = (TokenEstrutura)this.conversorJSON.converteObject( new String( this.encriptor.decrypt(str) ) );
             token.setDuracaoMinutos(duracao);
             token.atualizar();
             return this.encriptor.encrypt( conversorJSON.converteJSON(token) );

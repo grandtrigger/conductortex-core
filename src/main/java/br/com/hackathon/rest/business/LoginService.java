@@ -9,7 +9,13 @@ package br.com.hackathon.rest.business;
 import br.com.hackathon.rest.dao.LoginDAO;
 import br.com.hackathon.rest.exception.DAOException;
 import br.com.hackathon.rest.exception.NegocioException;
+import br.com.hackathon.rest.model.Conta;
 import br.com.hackathon.rest.model.Login;
+import br.com.hackathon.rest.token.GerenciadorToken;
+import br.com.hackathon.rest.token.Token;
+import br.com.hackathon.rest.validador.ObjetoValidador;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -28,11 +34,21 @@ public class LoginService {
     @Inject
     private LoginDAO loginDAO;
     
-    public Boolean logar(Login login) throws NegocioException{
+    @Inject
+    private ObjetoValidador objetoValidador;
+    
+    @Inject
+    private GerenciadorToken gerenciadorToken;
+    
+    public Token logar(Login login) throws NegocioException{
         try {
-            return loginDAO.consultarContaPorTelefoneSenha(login.getTelefone(), login.getSenha()) != null;
-        } catch (DAOException e) {
-            throw new NegocioException(e);
+            Conta conta  = loginDAO.consultarContaPorTelefoneSenha(login.getTelefone(), login.getSenha());
+            if( objetoValidador.isValid( conta ) ){
+                return new Token( gerenciadorToken.gerador( "felipedebritolira@gmial.com", 30L) );
+            }
+            return null;
+        } catch (DAOException | NoSuchAlgorithmException | NoSuchPaddingException ex) {
+            throw new NegocioException(ex);
         }
     }
     

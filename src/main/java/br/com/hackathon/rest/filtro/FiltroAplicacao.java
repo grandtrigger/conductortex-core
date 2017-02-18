@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -30,9 +31,12 @@ public class FiltroAplicacao implements Filter{
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        //verificar se a request está com token valido
-        System.out.println("Filtro rest");
-        chain.doFilter(request, response);
+        HttpServletResponse res = (HttpServletResponse) response;
+        res.setHeader("Access-Control-Allow-Origin", "*" );
+        res.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, OPTIONS");
+        res.setHeader("Access-Control-Max-Age", "3600");
+        res.setHeader("Access-Control-Allow-Headers", "x-requested-with, X-Auth-Token, Content-Type");
+        chain.doFilter(request, res);
     }
 
     @Override

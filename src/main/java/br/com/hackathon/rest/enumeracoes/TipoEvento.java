@@ -9,13 +9,10 @@ package br.com.hackathon.rest.enumeracoes;
  *
  * @author Felipe de Brito Lira <felipedebritolira@gmail.com>
  */
-public enum MensagensCodigo {
+public enum TipoEvento {
     
-    MS001,
-    MS002,
-    MS003,
-    MS004,
-    MS005,
-    MS006
+    CONFIRMADO,
+    OCORRIDO,
+    PENDENTE
     
 }

@@ -1,5 +1,7 @@
 package br.com.hackathon.rest.config;
 
+import br.com.hackathon.rest.services.ContaRest;
+import br.com.hackathon.rest.services.EventoRest;
 import br.com.hackathon.rest.services.LoginRest;
 import br.com.hackathon.rest.services.VerificacaoDB;
 import java.util.HashSet;
@@ -32,6 +34,8 @@ public class ApplicationConfig extends Application{
     private void addClass(Set<Class<?>> resources){
         resources.add(VerificacaoDB.class);
         resources.add(LoginRest.class);
+        resources.add(ContaRest.class);
+        resources.add(EventoRest.class);
     }
     
 }

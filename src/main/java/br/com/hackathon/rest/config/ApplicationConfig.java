@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
-import org.eclipse.persistence.internal.oxm.mappings.Login;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

@@ -3,9 +3,6 @@ package br.com.hackathon.rest.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
 
 /**
  * Conversor de arquivos JSON, esta classe tem a finalidade de prover métodos
@@ -21,18 +18,11 @@ public class ConversorJSON<T> implements Serializable {
     private final Gson gson;
     private final Class classe;
 
-    private ConversorJSON(Class classe) {
+    public ConversorJSON(Class classe) {
         this.gson = new Gson();
         this.classe = classe;
     }
 
-    @Produces
-    private ConversorJSON<T> produces(InjectionPoint injectionPoint){
-        ParameterizedType type = (ParameterizedType) injectionPoint.getType();
-        Class classeInjecao = (Class) type.getActualTypeArguments()[0];
-        return new ConversorJSON<>(classeInjecao);
-    }
-    
     /**
      * Este método realiza o parse do Objeto para o formato JSON.
      *

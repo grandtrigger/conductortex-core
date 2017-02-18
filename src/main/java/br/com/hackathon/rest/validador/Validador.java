@@ -5,7 +5,6 @@
 package br.com.hackathon.rest.validador;
 
 import java.io.Serializable;
-import javax.enterprise.inject.Produces;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -16,11 +15,6 @@ import javax.validation.ValidatorFactory;
  */
 public class Validador implements Serializable{
 
-    @Produces
-    private Validador produces(){
-        return new Validador();
-    }
-        
     /**
      * Este método é responsavel por validar um objeto. A validação é feito nos
      * atributos dos objetos. Retorna true caso os campos definidos no objeto

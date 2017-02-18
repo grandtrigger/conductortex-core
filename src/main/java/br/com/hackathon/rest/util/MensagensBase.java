@@ -8,7 +8,6 @@ package br.com.hackathon.rest.util;
 
 import br.com.hackathon.rest.enumeracoes.MensagensCodigo;
 import java.util.ResourceBundle;
-import javax.enterprise.inject.Produces;
 
 /**
  *
@@ -19,17 +18,12 @@ import javax.enterprise.inject.Produces;
 public class MensagensBase {
 
     private final ResourceBundle bundle;
-    
+
     public MensagensBase(){
         this.bundle = ResourceBundle.getBundle("mensagens");
     }
     
     public String get(MensagensCodigo codigo){
         return this.bundle.getString( codigo.name() );
-    }
-    
-    @Produces
-    private MensagensBase produces(){
-        return new MensagensBase();
     }
 }

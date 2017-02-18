@@ -6,7 +6,6 @@
 
 package br.com.hackathon.rest.validador;
 
-import javax.enterprise.inject.Produces;
 
 /**
  *
@@ -16,11 +15,6 @@ import javax.enterprise.inject.Produces;
  */
 public class StringValidador {
 
-    @Produces
-    private StringValidador produces(){
-        return new StringValidador();
-    }
-    
     /**
      * Método que verifica se uma String é nula, vazia ou é espaço em branco.
      * @param str

@@ -7,7 +7,6 @@ package br.com.hackathon.rest.validador;
 
 import java.util.List;
 import java.util.Map;
-import javax.enterprise.inject.Produces;
 
 /**
  *
@@ -17,11 +16,6 @@ import javax.enterprise.inject.Produces;
  */
 public class ListaValidador {
 
-    @Produces
-    private ListaValidador produces(){
-        return new ListaValidador();
-    }
-    
     /**
      * Método que verifica se um Map<?, ?> está válido. Retorna false se e
      * somente se o Map<?, ?> estiver nulo ou vazio, caso contrario retorna true

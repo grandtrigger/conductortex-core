@@ -12,7 +12,8 @@ import br.com.hackathon.rest.util.ConversorJSON;
 import br.com.hackathon.rest.util.MensagensBase;
 import br.com.hackathon.rest.validador.StringValidador;
 import com.google.gson.JsonSyntaxException;
-import javax.enterprise.inject.Produces;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
 
 /**
@@ -25,24 +26,19 @@ public class GerenciadorToken {
 
     @Inject
     private Encriptor encriptor;
-
+    
     @Inject
     private StringValidador stringValidador;
-
+    
     @Inject
     private ConversorJSON<Token> conversorJSON;
-
+    
     @Inject
     private MensagensBase mensagensBase;
     
     private final Long DURACAO = 5L;
     
     public GerenciadorToken() {
-    }
-
-    @Produces
-    private GerenciadorToken produces() {
-        return new GerenciadorToken();
     }
 
     /**
@@ -56,8 +52,10 @@ public class GerenciadorToken {
      * @param email
      * @param duracao
      * @return String
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws javax.crypto.NoSuchPaddingException
      */
-    public String gerador(String email, Long duracao) {
+    public String gerador(String email, Long duracao) throws NoSuchAlgorithmException, NoSuchPaddingException {
         email = stringValidador.isValid(email) ? email : GerenciadorToken.class.toString();
         Token token = new Token(email, (duracao <= 0 ? DURACAO : duracao) );
         return this.encriptor.encrypt( conversorJSON.converteJSON(token) );
@@ -68,13 +66,15 @@ public class GerenciadorToken {
      * @param str
      * @return Boolean
      * @throws br.com.hackathon.rest.exception.TokenException
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws javax.crypto.NoSuchPaddingException
      */
-    public Boolean isTokenExpirado(String str) throws TokenException{
+    public Boolean isTokenExpirado(String str) throws TokenException, NoSuchAlgorithmException, NoSuchPaddingException{
         if( !this.stringValidador.isValid(str) ){
             throw new TokenException( mensagensBase.get(MensagensCodigo.MS001) );
         }
         try {
-            Token token = this.conversorJSON.converteObject(  new String( this.encriptor.decrypt(str) ) );
+            Token token = (Token)this.conversorJSON.converteObject(  new String( this.encriptor.decrypt(str) ) );
             return token.isExpirado();
         } catch (JsonSyntaxException e) {
             throw new TokenException( e );
@@ -87,13 +87,15 @@ public class GerenciadorToken {
      * @param duracao
      * @return String
      * @throws TokenException 
+     * @throws java.security.NoSuchAlgorithmException 
+     * @throws javax.crypto.NoSuchPaddingException 
      */
-    public String atualizarToken(String str, Long duracao) throws TokenException{
+    public String atualizarToken(String str, Long duracao) throws TokenException, NoSuchAlgorithmException, NoSuchPaddingException{
         if( !this.stringValidador.isValid(str) ){
             throw new TokenException( mensagensBase.get(MensagensCodigo.MS001) );
         }
         try {
-            Token token = this.conversorJSON.converteObject( new String( this.encriptor.decrypt(str) ) );
+            Token token = (Token)this.conversorJSON.converteObject( new String( this.encriptor.decrypt(str) ) );
             token.setDuracaoMinutos(duracao);
             token.atualizar();
             return this.encriptor.encrypt( conversorJSON.converteJSON(token) );

@@ -6,7 +6,10 @@
 
 package br.com.hackathon.rest.services;
 
+import br.com.hackathon.rest.business.LoginService;
+import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Login;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -23,11 +26,18 @@ import javax.ws.rs.core.Response;
 @Path("/login")
 public class LoginRest {
 
+    @Inject
+    private LoginService loginService;
+    
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(Login login){
-        return null;
+    public Response login(Login login) throws NegocioException{
+        try {
+            return Response.ok().entity( loginService.logar(login) ).build();
+        } catch (NegocioException ex) {
+            throw new NegocioException("");
+        }
     }
     
 }

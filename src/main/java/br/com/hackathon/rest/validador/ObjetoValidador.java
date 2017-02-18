@@ -6,7 +6,6 @@
 
 package br.com.hackathon.rest.validador;
 
-import javax.enterprise.inject.Produces;
 
 /**
  *
@@ -16,11 +15,6 @@ import javax.enterprise.inject.Produces;
  */
 public class ObjetoValidador {
 
-    @Produces
-    private ObjetoValidador produces(){
-        return new ObjetoValidador();
-    }
-    
     /**
      * Método que verifica se um Objeto esta nulo. Caso esteja é retornado false e caso contrario é retorado true.
      * @param obj

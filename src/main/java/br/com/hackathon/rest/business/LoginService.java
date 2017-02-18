@@ -10,7 +10,6 @@ import br.com.hackathon.rest.dao.LoginDAO;
 import br.com.hackathon.rest.exception.DAOException;
 import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Login;
-import br.com.hackathon.rest.validador.Validador;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -28,9 +27,6 @@ public class LoginService {
 
     @Inject
     private LoginDAO loginDAO;
-    
-    @Inject
-    private Validador validador;
     
     public Boolean logar(Login login) throws NegocioException{
         try {

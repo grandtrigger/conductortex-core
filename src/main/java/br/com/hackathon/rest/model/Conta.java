@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Email;
@@ -26,6 +28,9 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @TableGenerator(allocationSize = 1, initialValue = 1, name = "conta_seq")
+@NamedQueries(value = {
+    @NamedQuery(name = "conta.consultar.conta.por.login.senha", query = "SELECT c FROM Conta c WHERE c.telefone = :telefone AND c.senha = :senha")
+})
 public class Conta implements Serializable, Comparable<Conta>{
 
     @Id
@@ -36,6 +41,11 @@ public class Conta implements Serializable, Comparable<Conta>{
     @NotEmpty(message = "O campo nomeCompleto não pode ser vazio")
     @Column(nullable = false, length = 200, unique = false)
     private String nomeCompleto;
+    
+    @NotNull(message = "O campo telefone não pode ser nulo")
+    @NotEmpty(message = "O campo telefone não pode ser vazio")
+    @Column(nullable = false, length = 11, unique = true)
+    private String telefone;
     
     @NotNull(message = "O campo apelido não pode ser nulo")
     @NotEmpty(message = "O campo apelido não pode ser vazio")
@@ -67,9 +77,10 @@ public class Conta implements Serializable, Comparable<Conta>{
     public Conta() {
     }
 
-    public Conta(String nomeCompleto, String apelido, String email, String cpf, String senha) {
+    public Conta(String nomeCompleto, String telefone, String apelido, String email, String cpf, String senha) {
         this.nomeCompleto = nomeCompleto;
         this.apelido = apelido;
+        this.telefone = telefone;
         this.email = email;
         this.senha = senha;
         this.cpf = cpf;
@@ -137,6 +148,14 @@ public class Conta implements Serializable, Comparable<Conta>{
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
     
     @Override

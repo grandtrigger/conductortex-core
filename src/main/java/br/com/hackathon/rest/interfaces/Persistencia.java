@@ -1,5 +1,6 @@
 package br.com.hackathon.rest.interfaces;
 
+import br.com.hackathon.rest.exception.PersistenciaException;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -65,6 +66,6 @@ public interface Persistencia <T, K>{
      * @param parametros
      * @return List
      */
-    public List<T> consultar(String namedQuery, Map<?, ?> parametros);
+    public List<T> consultar(String namedQuery, Map<?, ?> parametros)throws PersistenciaException;
     
 }

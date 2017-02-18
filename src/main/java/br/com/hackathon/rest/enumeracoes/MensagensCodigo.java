@@ -11,6 +11,7 @@ package br.com.hackathon.rest.enumeracoes;
  */
 public enum MensagensCodigo {
     
-    MS001
+    MS001,
+    MS002
     
 }

@@ -7,7 +7,6 @@ package br.com.hackathon.rest.services;
 
 import br.com.hackathon.rest.business.ContaService;
 import br.com.hackathon.rest.exception.NegocioException;
-import br.com.hackathon.rest.model.Conta;
 import br.com.hackathon.rest.model.UsuarioAgendaCelular;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -70,7 +69,7 @@ public class ContaRest {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response consultarContasPorTelefone(UsuarioAgendaCelular usuario){
         try {
-            return Response.ok().entity( contaService.consultarContaPorEmail(usuario.getTelefones())).build();
+            return Response.ok().entity( contaService.consultarContasAmigos(usuario.getTelefones())).build();
         } catch (NegocioException ex) {
             throw new WebApplicationException(ex);
         }

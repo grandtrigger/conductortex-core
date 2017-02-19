@@ -44,7 +44,7 @@ public class LoginService {
         try {
             Conta conta  = loginDAO.consultarContaPorTelefoneSenha(login.getTelefone(), login.getSenha());
             if( objetoValidador.isValid( conta ) ){
-                return new Token( gerenciadorToken.gerador( "felipedebritolira@gmial.com", 30L) );
+                return new Token( gerenciadorToken.gerador( conta.getEmail(), 30L), login.getTelefone() );
             }
             return null;
         } catch (DAOException | NoSuchAlgorithmException | NoSuchPaddingException ex) {

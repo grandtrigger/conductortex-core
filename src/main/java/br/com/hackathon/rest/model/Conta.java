@@ -6,15 +6,19 @@
 
 package br.com.hackathon.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
 
 /**
@@ -26,12 +30,13 @@ import javax.persistence.TableGenerator;
 @Entity
 @TableGenerator(allocationSize = 1, initialValue = 1, name = "conta_seq")
 @NamedQueries(value = {
-    @NamedQuery(name = "conta.consultar.conta.por.login.senha", query = "SELECT c FROM Conta c WHERE c.telefone = :telefone AND c.senha = :senha"),
+    @NamedQuery(name = "conta.consultar.conta.por.login.senha", query = "SELECT c FROM Conta c WHERE c.seguranca.telefone = :telefone AND c.seguranca.senha = :senha"),
     @NamedQuery(name="conta.consultar.conta.por.telefone", query="SELECT c FROM Conta c WHERE c.telefone = :telefone"),
     @NamedQuery(name="conta.consultar.conta.por.cpf", query="SELECT c FROM Conta c WHERE c.cpf = :cpf"),
     @NamedQuery(name="conta.consultar.conta.por.email", query="SELECT c FROM Conta c WHERE c.email = :email"),
-    @NamedQuery(name="conta.consultar.contas.relacionadas.por.telefone", query="SELECT c FROM Conta c WHERE c.telefone IN(:telefones)")
+    @NamedQuery(name="conta.consultar.contas.relacionadas.por.telefone", query="SELECT c FROM Conta c WHERE c.telefone IN :telefones")
 })
+@JsonIgnoreProperties(value = {"seguranca"})
 public class Conta implements Serializable, Comparable<Conta>{
 
     @Id
@@ -53,8 +58,8 @@ public class Conta implements Serializable, Comparable<Conta>{
     @Column(nullable = false, length = 11, unique = true)
     private String cpf;
     
-    @Column(nullable = false, unique = false)
-    private String senha;
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Seguranca seguranca;
     
     private String registroId;
     
@@ -66,12 +71,11 @@ public class Conta implements Serializable, Comparable<Conta>{
         this.limiteEspecial = new BigDecimal("100");
     }
 
-    public Conta(String nomeCompleto, String telefone, String apelido, String email, String cpf, String senha) {
+    public Conta(String nomeCompleto, String telefone, String apelido, String email, String cpf) {
         this.nomeCompleto = nomeCompleto;
         this.apelido = apelido;
         this.telefone = telefone;
         this.email = email;
-        this.senha = senha;
         this.cpf = cpf;
         this.limiteEspecial = new BigDecimal("100");
     }
@@ -132,14 +136,14 @@ public class Conta implements Serializable, Comparable<Conta>{
         this.limiteEspecial = limiteEspecial;
     }
 
-    public String getSenha() {
-        return senha;
+    public Seguranca getSeguranca() {
+        return seguranca;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setSeguranca(Seguranca seguranca) {
+        this.seguranca = seguranca;
     }
-
+    
     public String getTelefone() {
         return telefone;
     }

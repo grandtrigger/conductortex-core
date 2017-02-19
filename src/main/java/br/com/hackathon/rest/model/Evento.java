@@ -9,7 +9,6 @@ package br.com.hackathon.rest.model;
 import br.com.hackathon.rest.enumeracoes.TipoEvento;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

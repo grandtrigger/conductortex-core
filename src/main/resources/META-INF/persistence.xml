@@ -5,6 +5,7 @@
     <class>br.com.hackathon.rest.model.Conta</class>
     <class>br.com.hackathon.rest.model.Evento</class>
     <class>br.com.hackathon.rest.model.Participante</class>
+    <class>br.com.hackathon.rest.model.Seguranca</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>

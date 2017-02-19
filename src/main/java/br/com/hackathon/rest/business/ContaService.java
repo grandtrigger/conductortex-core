@@ -57,7 +57,7 @@ public class ContaService {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Boolean cadastrar(Conta conta) throws NegocioException{
         try {
-            conta.setSenha( encriptor.encrypt(conta.getSenha() ) );
+            conta.getSeguranca().setSenha( encriptor.encrypt(conta.getSeguranca().getSenha() ) );
             return contaDAO.cadastraConta(conta) != null;
         } catch (DAOException | NoSuchAlgorithmException| NoSuchPaddingException ex) {
             throw new NegocioException(ex);
@@ -121,12 +121,12 @@ public class ContaService {
      * @return List
      * @throws NegocioException 
      */
-    public List<Conta> consultarContaPorEmail(List<String> lista) throws NegocioException{
+    public List<Conta> consultarContasAmigos(List<String> lista) throws NegocioException{
         try {
             if( !listaValidador.isValid(lista) ){
                 throw new NegocioException( mensagensBase.get(MensagensCodigo.MS007));
             }
-            return contaDAO.consultaContaPorEmail(lista);
+            return contaDAO.consultarContasAmigos(lista);
         } catch (DAOException e) {
             throw new NegocioException(e);
         }

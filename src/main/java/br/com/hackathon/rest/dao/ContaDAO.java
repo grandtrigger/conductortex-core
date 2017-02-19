@@ -113,7 +113,7 @@ public class ContaDAO {
      * @return List
      * @throws DAOException 
      */
-    public List<Conta> consultaContaPorEmail(List<String> lista) throws DAOException{
+    public List<Conta> consultarContasAmigos(List<String> lista) throws DAOException{
         try {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("telefones", lista);

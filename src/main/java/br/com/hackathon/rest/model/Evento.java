@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -64,7 +65,7 @@ public class Evento implements Serializable{
     private List<Participante> participantes;
 
     @Temporal(TemporalType.DATE)
-    private LocalDate dataCriacao;
+    private Calendar dataCriacao;
     
     @Enumerated(EnumType.STRING)
     private TipoEvento tipoEvento;
@@ -129,11 +130,11 @@ public class Evento implements Serializable{
         this.tipoEvento = tipoEvento;
     }
 
-    public LocalDate getDataCriacao() {
+    public Calendar getDataCriacao() {
         return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao(Calendar dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
     

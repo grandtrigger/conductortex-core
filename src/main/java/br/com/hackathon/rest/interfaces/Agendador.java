@@ -11,6 +11,7 @@ import br.com.hackathon.rest.enumeracoes.TipoEvento;
 import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Evento;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +37,8 @@ public class Agendador {
             LocalDate data = LocalDate.now();
             List<Evento> eventos = eventoService.consultarTodosEventosAtuais();
             for(Evento evento : eventos){
-                if( data.isAfter( evento.getDataCriacao()) ){
+                LocalDate dataEvento = evento.getDataCriacao().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                if( data.isAfter( dataEvento ) ){
                     evento.setTipoEvento(TipoEvento.OCORRIDO);
                     eventoService.atualizarEvento(evento);
                 }

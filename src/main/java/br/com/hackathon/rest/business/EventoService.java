@@ -10,7 +10,6 @@ import br.com.hackathon.rest.dao.EventoDAO;
 import br.com.hackathon.rest.exception.DAOException;
 import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Evento;
-import br.com.hackathon.rest.model.Participante;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;

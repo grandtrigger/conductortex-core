@@ -13,7 +13,6 @@ import br.com.hackathon.rest.exception.PersistenciaException;
 import br.com.hackathon.rest.interfaces.Persistencia;
 import br.com.hackathon.rest.model.Evento;
 import br.com.hackathon.rest.util.MensagensBase;
-import br.com.hackathon.rest.validador.ListaValidador;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +34,16 @@ public class EventoDAO {
       
     @Inject
     private MensagensBase mensagensBase;
+    
+    public List<Evento> consultarTodosEventosAtuais()throws DAOException{
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("evento", TipoEvento.CONFIRMADO);
+            return dao.consultar("vento.consultar.todos.eventos.atuais", parametros);
+        } catch (PersistenciaException ex) {
+            throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
+        }
+    }
     
     /**
      * 

@@ -36,7 +36,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @TableGenerator(allocationSize = 1, initialValue = 1, name = "evento_seq")
 @NamedQueries(value = {
-    @NamedQuery(name = "evento.consultar.eventos.por.participante", query = "SELECT DISTINCT(e) FROM Evento e JOIN e.participantes p  WHERE e.criador.conta.telefone = :telefone OR p.conta.telefone = :telefone AND e.tipoEvento = :evento ")
+    @NamedQuery(name = "evento.consultar.eventos.por.participante", query = "SELECT DISTINCT(e) FROM Evento e JOIN e.participantes p  WHERE e.criador.conta.telefone = :telefone OR p.conta.telefone = :telefone AND e.tipoEvento = :evento "),
+    @NamedQuery(name = "evento.consultar.todos.eventos.atuais", query = "SELECT e FROM Evento e WHERE e.tipoEvento = :evento")
 })
 public class Evento implements Serializable{
 

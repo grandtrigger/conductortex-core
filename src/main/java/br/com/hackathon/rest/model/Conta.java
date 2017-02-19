@@ -55,6 +55,8 @@ public class Conta implements Serializable, Comparable<Conta>{
     @Column(nullable = false, unique = false)
     private String senha;
     
+    private String registroId;
+    
     private BigDecimal saldo;
     
     private BigDecimal limiteEspecial;
@@ -143,6 +145,14 @@ public class Conta implements Serializable, Comparable<Conta>{
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public String getRegistroId() {
+        return registroId;
+    }
+
+    public void setRegistroId(String registroId) {
+        this.registroId = registroId;
     }
     
     @Override

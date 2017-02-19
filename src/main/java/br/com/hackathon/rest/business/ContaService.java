@@ -14,7 +14,6 @@ import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Conta;
 import br.com.hackathon.rest.util.MensagensBase;
 import br.com.hackathon.rest.validador.StringValidador;
-import br.com.hackathon.rest.validador.Validador;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.NoSuchPaddingException;
 import javax.ejb.Stateless;
@@ -36,9 +35,6 @@ public class ContaService {
     private ContaDAO contaDAO;
     
     @Inject
-    private Validador validador;
-    
-    @Inject
     private StringValidador stringValidador;
     
     @Inject
@@ -56,9 +52,6 @@ public class ContaService {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Boolean cadastrar(Conta conta) throws NegocioException{
         try {
-            if( !validador.validar(conta) ){
-                throw new NegocioException( validador.getErro() );
-            }
             conta.setSenha( encriptor.encrypt(conta.getSenha() ) );
             return contaDAO.cadastraConta(conta) != null;
         } catch (DAOException | NoSuchAlgorithmException| NoSuchPaddingException ex) {

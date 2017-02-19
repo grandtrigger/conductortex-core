@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 18/02/2017
  *
  */
-@WebFilter( filterName = "filtroGerenciamentoConta", urlPatterns = "/api/contas")
+@WebFilter( filterName = "filtroGerenciamentoConta", urlPatterns = "/api/gerenciamento/*")
 public class FiltroGerenciamentoConta implements Filter{
 
     @Override

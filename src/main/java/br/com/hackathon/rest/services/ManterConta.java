@@ -24,7 +24,7 @@ import javax.ws.rs.core.Response;
  * @date 19/02/2017
  *
  */
-@Path("/contas")
+@Path("/gerenciamento/contas")
 public class ManterConta {
 
     @Inject

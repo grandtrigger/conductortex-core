@@ -33,7 +33,7 @@ public class Participante implements Serializable{
     @ManyToOne(cascade = {CascadeType.MERGE})
     private Conta conta;
     
-    @Column(length = 1, nullable = false)
+    @Column(length = 1, nullable = true)
     private Boolean confirmacao;
 
     public Participante() {

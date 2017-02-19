@@ -151,4 +151,55 @@ public class EventoDAO {
         }
     }
     
+    /**
+     * Consultar eventos ocorridos por criador
+     * @param telefone
+     * @return List
+     * @throws br.com.hackathon.rest.exception.DAOException
+     */
+    public List<Evento> consultarEventosOcorridosPorCriador(String telefone)throws DAOException{
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("telefone", telefone);
+            parametros.put("evento", TipoEvento.OCORRIDO);
+            return dao.consultar("evento.consultar.eventos.por.criador", parametros);
+        } catch (PersistenciaException ex) {
+            throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
+        }
+    }
+    
+    /**
+     * Consultar eventos pendentes por criador
+     * @param telefone
+     * @return List
+     * @throws br.com.hackathon.rest.exception.DAOException
+     */
+    public List<Evento> consultarEventosPendentesPorCriador(String telefone)throws DAOException{
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("telefone", telefone);
+            parametros.put("evento", TipoEvento.PENDENTE);
+            return dao.consultar("evento.consultar.eventos.por.criador", parametros);
+        } catch (PersistenciaException ex) {
+            throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
+        }
+    }
+    
+    /**
+     * Consultar eventos confirmados por criador
+     * @param telefone
+     * @return List
+     * @throws br.com.hackathon.rest.exception.DAOException
+     */
+    public List<Evento> consultarEventosConfirmadosPorCriador(String telefone)throws DAOException{
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("telefone", telefone);
+            parametros.put("evento", TipoEvento.CONFIRMADO);
+            return dao.consultar("evento.consultar.eventos.por.criador", parametros);
+        } catch (PersistenciaException ex) {
+            throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
+        }
+    }
+    
 }//EventoDAO

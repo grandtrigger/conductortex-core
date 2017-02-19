@@ -78,7 +78,10 @@ public class EventoService {
     
     public List<Evento> consultarEventosOcorridosPorParticipantes(String telefone)throws NegocioException{
         try {
-            return eventoDAO.consultarEventosOcorridosPorParticipante(telefone);
+            List<Evento> eventos = new ArrayList<>();
+            eventos.addAll( eventoDAO.consultarEventosOcorridosPorParticipante(telefone) );
+            eventos.addAll( eventoDAO.consultarEventosOcorridosPorCriador(telefone) );
+            return eventos;
         } catch (DAOException ex) {
             throw new NegocioException(ex);
         }
@@ -88,7 +91,9 @@ public class EventoService {
         try {
             List<Evento> eventos = new ArrayList<>();
             eventos.addAll( eventoDAO.consultarEventosPendentesPorParticipante(telefone) );
+            eventos.addAll( eventoDAO.consultarEventosPendentesPorCriador(telefone) );
             eventos.addAll( eventoDAO.consultarEventosConfirmadosPorParticipante(telefone) );
+            eventos.addAll( eventoDAO.consultarEventosConfirmadosPorCriador(telefone) );
             return eventos;
         } catch (DAOException ex) {
             throw new NegocioException(ex);

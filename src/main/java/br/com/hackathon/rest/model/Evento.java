@@ -28,8 +28,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -40,7 +38,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @TableGenerator(allocationSize = 1, initialValue = 1, name = "evento_seq")
 @NamedQueries(value = {
-    @NamedQuery(name = "evento.consultar.eventos.por.participante", query = "SELECT DISTINCT(e) FROM Evento e JOIN e.participantes p  WHERE e.criador.conta.telefone = :telefone OR p.conta.telefone = :telefone AND e.tipoEvento = :evento "),
+    @NamedQuery(name = "evento.consultar.eventos.por.participante", query = "SELECT e FROM Evento e IN e.participantes p WHERE p.conta.telefone = :telefone AND e.tipoEvento = :evento"),
+    @NamedQuery(name = "evento.consultar.eventos.por.criador", query = "SELECT e FROM Evento e WHERE e.criador.conta.telefone = :telefone AND e.tipoEvento = :evento"),
     @NamedQuery(name = "evento.consultar.todos.eventos.atuais", query = "SELECT e FROM Evento e WHERE e.tipoEvento = :evento")
 })
 public class Evento implements Serializable{

@@ -43,43 +43,35 @@ public class Conta implements Serializable, Comparable<Conta>{
     
     @NotNull(message = "O campo nomeCompleto não pode ser nulo")
     @NotEmpty(message = "O campo nomeCompleto não pode ser vazio")
-    @Column(nullable = false, length = 200, unique = false)
     private String nomeCompleto;
     
     @NotNull(message = "O campo telefone não pode ser nulo")
     @NotEmpty(message = "O campo telefone não pode ser vazio")
     @Size(max = 11, min = 11, message = "Telefone deve ter no mínimo 11 e no máximo 11 caracteres ")
-    @Column(nullable = false, length = 11, unique = true)
     private String telefone;
     
     @NotNull(message = "O campo apelido não pode ser nulo")
     @NotEmpty(message = "O campo apelido não pode ser vazio")
     @Size(min = 6, max = 20, message = "Apelido deve ter no mínimo 6 e no máximo 20 caracteres ")
-    @Column(nullable = false, length = 20, unique = false)
     private String apelido;
     
     @NotNull(message = "O campo email não pode ser nulo")
     @NotEmpty(message = "O campo email não pode ser vazio")
     @Email(message = "Email não é válido")
-    @Column(nullable = false, length = 250, unique = true)
     private String email;
     
     @NotNull(message = "O campo cpf não pode ser nulo")
     @NotEmpty(message = "O campo cpf não pode ser vazio")
     @Size(max = 11, min = 11, message = "Cpf deve ter no mínimo 11 e no máximo 11 caracteres ")
-    @Column(nullable = false, length = 11, unique = true)
     private String cpf;
     
     @NotNull(message = "O campo senha não pode ser nula.")
     @NotEmpty(message = "O campo senha não pode ser vazio.")
     @Size(min = 6, max = 15, message = "Senha deve ter no mínimo 6 e no máximo 15.")
-    @Column(nullable = false, unique = false)
     private String senha;
     
-    @Column(nullable = true, unique = false)
     private BigDecimal saldo;
     
-    @Column(nullable = true, unique = false)
     private BigDecimal limiteEspecial;
 
     public Conta() {

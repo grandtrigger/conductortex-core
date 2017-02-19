@@ -7,6 +7,8 @@
 package br.com.hackathon.rest.interfaces;
 
 import br.com.hackathon.rest.business.EventoService;
+import br.com.hackathon.rest.model.Evento;
+import java.util.List;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,7 +27,7 @@ public class Agendador {
     
     @Schedule(hour = "0", minute = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     private void agendador(){
-        
+//        List<Evento> eventos = eventoService.c
         
     }
     

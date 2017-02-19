@@ -54,7 +54,7 @@ public class Conta implements Serializable, Comparable<Conta>{
     
     @NotNull(message = "O campo apelido não pode ser nulo")
     @NotEmpty(message = "O campo apelido não pode ser vazio")
-    @Size(max = 6, min = 20, message = "Apelido deve ter no mínimo 6 e no máximo 20 caracteres ")
+    @Size(min = 6, max = 20, message = "Apelido deve ter no mínimo 6 e no máximo 20 caracteres ")
     @Column(nullable = false, length = 20, unique = false)
     private String apelido;
     

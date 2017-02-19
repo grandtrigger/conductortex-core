@@ -59,6 +59,10 @@ public class EventoService {
         }
     }
     
+//    public List<Evento> consultarTodosEventosAtuais(){
+//        
+//    }
+    
     public List<Evento> consultarEventosOcorridosPorParticipantes(String telefone)throws NegocioException{
         try {
             return eventoDAO.consultarEventosOcorridosPorParticipante(telefone);

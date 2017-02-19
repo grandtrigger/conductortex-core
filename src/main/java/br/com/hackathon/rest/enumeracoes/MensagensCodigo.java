@@ -16,6 +16,7 @@ public enum MensagensCodigo {
     MS003,
     MS004,
     MS005,
-    MS006
+    MS006,
+    MS007
     
 }

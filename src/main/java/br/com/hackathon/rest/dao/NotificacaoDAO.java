@@ -10,6 +10,8 @@ import br.com.hackathon.rest.model.Participante;
 import br.com.hackathon.rest.util.ConversorJSON;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,12 +35,15 @@ public class NotificacaoDAO {
             ConversorJSON conversor = new ConversorJSON(String.class);
 
             StringBuilder builder = new StringBuilder();
-
+            Integer totalParticipantes = evento.getParticipantes().size() + 1;
+            
             builder.append(evento.getCriador().getConta().getApelido());
             builder.append(" acaba de lhe convidar para participar do evento ");
             builder.append(evento.getDescricao());
             builder.append(", que irá se realizar no dia ");
             builder.append(evento.getDataCriacao());
+            builder.append(". Sua cota de participação é de R$ ");
+            builder.append( evento.getValor().divide( new BigDecimal( totalParticipantes ), RoundingMode.HALF_UP));
             builder.append(".");
 
             List<String> ids = new ArrayList<>();
@@ -64,10 +69,79 @@ public class NotificacaoDAO {
             ConversorJSON conversor = new ConversorJSON(String.class);
 
             StringBuilder builder = new StringBuilder();
+            Integer totalParticipantes = evento.getParticipantes().size() + 1;
 
             builder.append("O evento ");
             builder.append(evento.getDescricao());
-            builder.append(" foi confirmado por todos e \"VAI ACONTECER\".");
+            builder.append(" foi confirmado por todos e \"VAI ACONTECER\". O valor da cota é de R$ ");
+            builder.append( evento.getValor().divide( new BigDecimal( totalParticipantes ), RoundingMode.HALF_UP));
+            builder.append(".");
+
+            List<String> ids = new ArrayList<>();
+            
+            ids.add(evento.getCriador().getConta().getRegistroId());
+            for (Participante participante : evento.getParticipantes()) {
+                ids.add(participante.getConta().getRegistroId());
+            }
+
+            String input = "{\"registration_ids\" : [\"" + conversor.converteJSON(ids) + "\"],\"data\" : {\"message\": \"" + builder.toString() + "\"},}";
+            send(input);
+
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(NotificacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(NotificacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public void sendNotificacaoEventoConfirmado(Evento evento, Participante desistente) {
+        try {
+            ConversorJSON conversor = new ConversorJSON(String.class);
+
+            StringBuilder builder = new StringBuilder();
+
+            Integer totalParticipantes = evento.getParticipantes().size() + 1;
+            
+            builder.append("O participante ");
+            builder.append( desistente.getConta().getApelido() );
+            builder.append(" acabou de desistir. A cota foi recalculada, sua contribuição agora é de R$ ");
+            builder.append( evento.getValor().divide( new BigDecimal( totalParticipantes ), RoundingMode.HALF_UP));
+            builder.append(".");
+
+            List<String> ids = new ArrayList<>();
+            
+            ids.add(evento.getCriador().getConta().getRegistroId());
+            for (Participante participante : evento.getParticipantes()) {
+                ids.add(participante.getConta().getRegistroId());
+            }
+
+            String input = "{\"registration_ids\" : [\"" + conversor.converteJSON(ids) + "\"],\"data\" : {\"message\": \"" + builder.toString() + "\"},}";
+            send(input);
+
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(NotificacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(NotificacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    public void sendNotificacaoEventoConfirmadoParticipanteDesistente(Evento evento, Participante desistente) {
+        try {
+            ConversorJSON conversor = new ConversorJSON(String.class);
+
+            StringBuilder builder = new StringBuilder();
+
+            Integer totalParticipantes = evento.getParticipantes().size() + 1;
+            
+            builder.append("O evento");
+            builder.append(evento.getDescricao());
+            builder.append(" foi confirmado por todos e \"VAI ACONTECER\". Mas uma pena que o participante");
+            builder.append( desistente.getConta().getApelido() );
+            builder.append(" acabou de desistir. A cota foi recalculada, sua contribuição agora é de R$ ");
+            builder.append( evento.getValor().divide( new BigDecimal( totalParticipantes ), RoundingMode.HALF_UP));
+            builder.append(".");
 
             List<String> ids = new ArrayList<>();
             

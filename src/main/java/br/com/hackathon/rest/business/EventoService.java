@@ -12,7 +12,9 @@ import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Evento;
 import br.com.hackathon.rest.model.Participante;
 import br.com.hackathon.rest.validador.ObjetoValidador;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -43,7 +45,7 @@ public class EventoService {
         try {
             Evento novoEvento = eventoDAO.cadastraEvento(evento);
             if (objetoValidador.isValid(novoEvento)) {
-                notificacaoDAO.sendNotificacaoConfirmacao(evento);
+//                notificacaoDAO.sendNotificacaoConfirmacao(evento);
             } else {
                 return Boolean.FALSE;
             }
@@ -79,7 +81,9 @@ public class EventoService {
                 }
 
                 if (confirmacao) {
-                    notificacaoDAO.sendNotificacaoEventoConfirmado(evento);
+                    debitar(evento);
+                    atualizarEvento(evento);
+//                    notificacaoDAO.sendNotificacaoEventoConfirmado(evento);
                 }
                 
             } else {
@@ -94,11 +98,51 @@ public class EventoService {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Boolean cancelarParticipacao(Long idEvento, String telefone) throws NegocioException{
+        try {
+            Participante desistente = null;
+            Evento evento = eventoDAO.consultarEvento(idEvento);
+            Iterator<Participante> iterator = evento.getParticipantes().iterator();
+            
+            while( iterator.hasNext() ){
+                Participante p = iterator.next();
+                if( p.getConta().getTelefone().equals(telefone) ){
+                    iterator.remove();
+                    eventoDAO.atualizarEvento(evento);
+                    break;
+                }
+            }
+            
+            Boolean confirmado = true;
+            
+            for(Participante participante : evento.getParticipantes()){
+                if( !participante.getConfirmacao() ){
+                    desistente = participante;
+                    confirmado = false;
+                }
+            }
+            
+            if( confirmado ){
+                debitar(evento);
+                atualizarEvento(evento);
+                notificacaoDAO.sendNotificacaoEventoConfirmadoParticipanteDesistente(evento, desistente);
+            }else{
+                notificacaoDAO.sendNotificacaoEventoConfirmado(evento, desistente);
+            }
+            
+            return Boolean.FALSE;
+            
+        } catch (DAOException ex) {
+            throw new NegocioException(ex);
+        }
+    }
+    
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Boolean excluirEvento(Long idEvento) throws NegocioException {
         try {
             Evento evento = eventoDAO.consultarEvento(idEvento);
             eventoDAO.excluirEvento(evento);
-            notificacaoDAO.sendNotificacaoEventoCancelado(evento);
+//            notificacaoDAO.sendNotificacaoEventoCancelado(evento);
             return Boolean.TRUE;
         } catch (DAOException ex) {
             throw new NegocioException(ex);
@@ -115,10 +159,7 @@ public class EventoService {
 
     public List<Evento> consultarEventosOcorridosPorParticipantes(String telefone) throws NegocioException {
         try {
-            List<Evento> eventos = new ArrayList<>();
-            eventos.addAll( eventoDAO.consultarEventosOcorridosPorParticipante(telefone) );
-            eventos.addAll( eventoDAO.consultarEventosOcorridosPorCriador(telefone) );
-            return eventos;
+            return eventoDAO.consultarEventosOcorridosPorParticipante(telefone);
         } catch (DAOException ex) {
             throw new NegocioException(ex);
         }
@@ -128,13 +169,28 @@ public class EventoService {
         try {
             List<Evento> eventos = new ArrayList<>();
             eventos.addAll( eventoDAO.consultarEventosPendentesPorParticipante(telefone) );
-            eventos.addAll( eventoDAO.consultarEventosPendentesPorCriador(telefone) );
             eventos.addAll( eventoDAO.consultarEventosConfirmadosPorParticipante(telefone) );
-            eventos.addAll( eventoDAO.consultarEventosConfirmadosPorCriador(telefone) );
             return eventos;
         } catch (DAOException ex) {
             throw new NegocioException(ex);
         }
     }
 
+    private void debitar(Evento evento){
+        
+        Integer totalParticipantes = evento.getParticipantes().size() + 1;
+        BigDecimal parteIdividual = evento.getValor().divide( new BigDecimal(totalParticipantes) );
+        evento.getCriador().getConta().setSaldo( evento.getValor().subtract(parteIdividual) );
+        
+        for(Participante participante : evento.getParticipantes()){
+            if( participante.getConta().getSaldo().compareTo(parteIdividual) < 0){
+                BigDecimal resto = parteIdividual.subtract( participante.getConta().getSaldo() );
+                participante.getConta().setLimiteEspecial( participante.getConta().getLimiteEspecial().subtract(resto) );
+            }else{
+                participante.getConta().setSaldo( participante.getConta().getSaldo().subtract(parteIdividual) );
+            }
+        }
+        
+    }
+    
 }

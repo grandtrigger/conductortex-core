@@ -29,7 +29,8 @@ import javax.persistence.TableGenerator;
     @NamedQuery(name = "conta.consultar.conta.por.login.senha", query = "SELECT c FROM Conta c WHERE c.telefone = :telefone AND c.senha = :senha"),
     @NamedQuery(name="conta.consultar.conta.por.telefone", query="SELECT c FROM Conta c WHERE c.telefone = :telefone"),
     @NamedQuery(name="conta.consultar.conta.por.cpf", query="SELECT c FROM Conta c WHERE c.cpf = :cpf"),
-    @NamedQuery(name="conta.consultar.conta.por.email", query="SELECT c FROM Conta c WHERE c.email = :email")
+    @NamedQuery(name="conta.consultar.conta.por.email", query="SELECT c FROM Conta c WHERE c.email = :email"),
+    @NamedQuery(name="conta.consultar.contas.relacionadas.por.telefone", query="SELECT c FROM Conta c WHERE c.telefone IN(:telefones)")
 })
 public class Conta implements Serializable, Comparable<Conta>{
 

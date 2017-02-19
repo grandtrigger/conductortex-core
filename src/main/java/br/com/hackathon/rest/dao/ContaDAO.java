@@ -105,5 +105,22 @@ public class ContaDAO {
             throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
         }//catch
     }//consultaContaPorEmail
+    
+    /**
+     * Método que recupera contas que existam na lista informada como parametro
+     * 
+     * @param lista
+     * @return List
+     * @throws DAOException 
+     */
+    public List<Conta> consultaContaPorEmail(List<String> lista) throws DAOException{
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("telefones", lista);
+            return dao.consultar("conta.consultar.contas.relacionadas.por.telefone", parametros);
+        } catch (PersistenciaException ex) {
+            throw new DAOException(mensagensBase.get(MensagensCodigo.MS002), ex);
+        }//catch
+    }//consultaContaPorEmail
 
 }//ContaDAO

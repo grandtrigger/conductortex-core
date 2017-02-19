@@ -18,6 +18,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ import javax.persistence.TemporalType;
 @Entity
 @TableGenerator(allocationSize = 1, initialValue = 1, name = "evento_seq")
 @NamedQueries(value = {
-    @NamedQuery(name = "evento.consultar.eventos.por.participante", query = "SELECT e FROM Evento e IN e.participantes p WHERE p.conta.telefone = :telefone AND e.tipoEvento = :evento"),
+    @NamedQuery(name = "evento.consultar.eventos.por.participante", query = "SELECT e FROM Evento e, Participante p WHERE e.tipoEvento = :evento AND (e.criador.conta.telefone = :telefone OR p MEMBER OF e.participantes )"),
     @NamedQuery(name = "evento.consultar.eventos.por.criador", query = "SELECT e FROM Evento e WHERE e.criador.conta.telefone = :telefone AND e.tipoEvento = :evento"),
     @NamedQuery(name = "evento.consultar.todos.eventos.atuais", query = "SELECT e FROM Evento e WHERE e.tipoEvento = :evento")
 })
@@ -54,9 +55,9 @@ public class Evento implements Serializable{
     @Column(nullable = false, unique = false, precision = 2)
     private BigDecimal valor;
     
-    @OneToOne(cascade = {CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Participante criador;
-    @OneToMany(cascade = {CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<Participante> participantes;
 
     @Temporal(TemporalType.DATE)

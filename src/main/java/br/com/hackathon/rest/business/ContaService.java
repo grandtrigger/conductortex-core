@@ -13,8 +13,10 @@ import br.com.hackathon.rest.exception.DAOException;
 import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Conta;
 import br.com.hackathon.rest.util.MensagensBase;
+import br.com.hackathon.rest.validador.ListaValidador;
 import br.com.hackathon.rest.validador.StringValidador;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import javax.crypto.NoSuchPaddingException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -42,6 +44,9 @@ public class ContaService {
     
     @Inject
     private Encriptor encriptor;
+    
+    @Inject
+    private ListaValidador listaValidador;
     
     /**
      * Metodo que cadastra uma nova Conta. Retorna true se a conta for persistida ou retorna false caso não seja persistida
@@ -105,6 +110,23 @@ public class ContaService {
                 throw new NegocioException( mensagensBase.get(MensagensCodigo.MS004));
             }
             return contaDAO.consultaContaPorEmail(email);
+        } catch (DAOException e) {
+            throw new NegocioException(e);
+        }
+    }
+    
+    /**
+     * Retorna uma lista de contas que possuem telefone dentro da lista de telefones
+     * @param lista
+     * @return List
+     * @throws NegocioException 
+     */
+    public List<Conta> consultarContaPorEmail(List<String> lista) throws NegocioException{
+        try {
+            if( !listaValidador.isValid(lista) ){
+                throw new NegocioException( mensagensBase.get(MensagensCodigo.MS007));
+            }
+            return contaDAO.consultaContaPorEmail(lista);
         } catch (DAOException e) {
             throw new NegocioException(e);
         }

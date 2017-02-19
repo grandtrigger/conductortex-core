@@ -76,13 +76,14 @@ public class Conta implements Serializable, Comparable<Conta>{
     @Column(nullable = false, unique = false)
     private String senha;
     
-    @Column(nullable = false, unique = false)
+    @Column(nullable = true, unique = false)
     private BigDecimal saldo;
     
-    @Column(nullable = false, unique = false)
+    @Column(nullable = true, unique = false)
     private BigDecimal limiteEspecial;
 
     public Conta() {
+        this.limiteEspecial = new BigDecimal("100");
     }
 
     public Conta(String nomeCompleto, String telefone, String apelido, String email, String cpf, String senha) {
@@ -92,6 +93,7 @@ public class Conta implements Serializable, Comparable<Conta>{
         this.email = email;
         this.senha = senha;
         this.cpf = cpf;
+        this.limiteEspecial = new BigDecimal("100");
     }
 
     public Long getId() {

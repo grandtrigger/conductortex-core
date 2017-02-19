@@ -40,6 +40,15 @@ public class EventoService {
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Boolean atualizarEvento(Evento evento)throws NegocioException{
+        try {
+            return eventoDAO.atualizarEvento(evento) != null;
+        } catch (DAOException ex) {
+            throw new NegocioException(ex);
+        }
+    }
+    
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Boolean confirmarParticipacao(Evento evento)throws NegocioException{
         try {
             return eventoDAO.atualizarEvento(evento) != null;
@@ -59,9 +68,13 @@ public class EventoService {
         }
     }
     
-//    public List<Evento> consultarTodosEventosAtuais(){
-//        
-//    }
+    public List<Evento> consultarTodosEventosAtuais() throws NegocioException{
+        try {
+            return eventoDAO.consultarTodosEventosAtuais();
+        } catch (DAOException ex) {
+            throw new NegocioException(ex);
+        }
+    }
     
     public List<Evento> consultarEventosOcorridosPorParticipantes(String telefone)throws NegocioException{
         try {

@@ -7,8 +7,13 @@
 package br.com.hackathon.rest.interfaces;
 
 import br.com.hackathon.rest.business.EventoService;
+import br.com.hackathon.rest.enumeracoes.TipoEvento;
+import br.com.hackathon.rest.exception.NegocioException;
 import br.com.hackathon.rest.model.Evento;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -27,8 +32,18 @@ public class Agendador {
     
     @Schedule(hour = "0", minute = "0", dayOfMonth = "*", month = "*", year = "*", persistent = false)
     private void agendador(){
-//        List<Evento> eventos = eventoService.c
-        
+        try {
+            LocalDate data = LocalDate.now();
+            List<Evento> eventos = eventoService.consultarTodosEventosAtuais();
+            for(Evento evento : eventos){
+                if( data.isAfter( evento.getDataCriacao()) ){
+                    evento.setTipoEvento(TipoEvento.OCORRIDO);
+                    eventoService.atualizarEvento(evento);
+                }
+            }
+        } catch (NegocioException ex) {
+            Logger.getLogger(Agendador.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

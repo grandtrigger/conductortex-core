@@ -9,6 +9,7 @@ package br.com.hackathon.rest.model;
 import br.com.hackathon.rest.enumeracoes.TipoEvento;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -24,6 +25,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -60,6 +63,9 @@ public class Evento implements Serializable{
     @OneToMany(cascade = {CascadeType.MERGE})
     private List<Participante> participantes;
 
+    @Temporal(TemporalType.DATE)
+    private LocalDate dataCriacao;
+    
     @Enumerated(EnumType.STRING)
     private TipoEvento tipoEvento;
     
@@ -121,6 +127,14 @@ public class Evento implements Serializable{
 
     public void setTipoEvento(TipoEvento tipoEvento) {
         this.tipoEvento = tipoEvento;
+    }
+
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
     
 }
